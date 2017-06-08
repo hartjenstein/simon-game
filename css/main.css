@@ -36,28 +36,39 @@
 
 .shape1 {
   border-top-left-radius: 320px;
-  background-color: green;
+  background-color: darkgreen;
   /*box-shadow: 0 0 5px 5px #141414;*/
+}
+.lit-up1 {
+    background-color: green !important;
 }
 
 .shape2 {
   float: left;
   border-top-right-radius: 320px;
-  background-color: red;
+  background-color: darkred;
   clear: right;
 }
-
+.lit-up2 {
+    background-color: red !important;
+}
 .shape3 {
   float: left;
   border-bottom-left-radius: 320px;
-  background-color: yellow;
+  background-color: #f7d156;
   clear: left;
+}
+.lit-up3 {
+    background-color: yellow !important;
 }
 
 .shape4 {
   float: left;
   border-bottom-right-radius: 320px;
-  background-color: blue;
+  background-color: darkblue;
+}
+.lit-up4 {
+    background-color: blue !important;
 }
 .circle {
   position: absolute;
@@ -155,9 +166,6 @@
 
 .btn-round {
   position: absolute; 
-  
-
-
   top: 137px;
   left: 111px;
 
@@ -165,22 +173,8 @@
 	-moz-box-shadow: 4px 5px 8px -2px grey;
 	-webkit-box-shadow: 6px 7px 10px -4px grey;
 	box-shadow: 5px 5px 7px -3px grey;
-	/*background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #63b8ee), color-stop(1, #468ccf) );
-	background:-moz-linear-gradient( center top, #63b8ee 5%, #468ccf 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#63b8ee', endColorstr='#468ccf');*/
 	background-color:red;
-	/*-webkit-border-top-left-radius:10px;
-	-moz-border-radius-topleft:10px;
-	border-top-left-radius:10px;
-	-webkit-border-top-right-radius:50px;
-	-moz-border-radius-topright:50px;
-	border-top-right-radius:50px;
-	-webkit-border-bottom-right-radius:50px;
-	-moz-border-radius-bottomright:50px;
-	border-bottom-right-radius:50px;
-	-webkit-border-bottom-left-radius:50px;
-	-moz-border-radius-bottomleft:50px;
-	border-bottom-left-radius:50px;*/
+
 text-indent:-4px;
 	border:1px solid #5f9ced;
 	display:inline-block;
@@ -194,15 +188,12 @@ height:22px;
 width:22px;
 	text-decoration:none;
 	text-align:center;
-}.btn-round:hover {
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #468ccf), color-stop(1, #63b8ee) );
-	background:-moz-linear-gradient( center top, #468ccf 5%, #63b8ee 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#468ccf', endColorstr='#63b8ee');
-	background-color:#468ccf;
+
 }.btn-round:active {
-	position:relative;
-	top:1px;
-}
+    position: absolute;
+	top: 138px;
+    left: 111px;
+} 
 
 .btn-round-label {
   font-family: 'Roboto', sans-serif;
