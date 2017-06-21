@@ -1,20 +1,20 @@
 "use strict";
-/* ----------- Simon Game Logic -------------*/
-// Constants
+// --------- Constants --------
     const MAX = 4;
     const MIN = 1;
+
 // ---------Event Listeners ---------
 
 // --- On-Off Switch 
-let onOff = document.querySelector(".onoffswitch-checkbox");
+const onOff = document.querySelector(".onoffswitch-checkbox");
 onOff.addEventListener('click', turnOnOff);
 
 // --- start Button 
-let startBtn = document.querySelector(".start");
+const startBtn = document.querySelector(".start");
 startBtn.addEventListener('click', startGame);
 
 // ----- Pad Press --------
-let pads = document.querySelectorAll(".pad");
+const pads = document.querySelectorAll(".pad");
 
 for (let pad of pads) {
     pad.addEventListener("mousedown", padClicked );
@@ -24,12 +24,37 @@ if(onOff.checked) {
 }
 
 // --------- Counter logic -------
-let counter = 0;
+// using closure pattern to avoid poluting global namespace
+let makeCounter =   function() {
+  let privateCounter = 0;
+  function changeBy(val) {
+    privateCounter += val;
+  }
+  return{
+    increment: function() {
+      changeBy(1);
+    },
+    decrement: function() {
+      changeBy(-1);
+    },
+    value: function() {
+      return privateCounter;
+    },
+    reset: function() {
+        privateCounter = 0;
+        return privateCounter;
+    }
+  }   
+};
+// creating to instances of makeCounter
+let counter = makeCounter();
+let elementCounter = makeCounter();
 
 // ----- On - Off Button logic -----
 function turnOnOff(){
-    counter = 0;
-    document.getElementById("count").innerHTML = counter;
+    counter.reset();
+    //let counter = 0;
+    document.getElementById("count").innerHTML = counter.value();
     if(!onOff.checked) {
         onOff.checked = false; 
     } else {
@@ -40,29 +65,23 @@ function turnOnOff(){
 function startGame() {
     
     if(onOff.checked) {
-        counter === 0
         compSequence = [];
         playerSequence = [];
-        chooseColor();
-        
+        chooseColor();    
     }
-
 }
+
 // ----- Computer sequence logic -------
 let compSequence = [];
 let playerSequence = [];
 let classNr = 0;
 function chooseColor(){
-    let randomNumber =  Math.floor(Math.random() * (MAX - MIN +1)) + MIN; 
-    var shapeClass = ".shape"+randomNumber;
-    var iluminated = "lit-up"+randomNumber;
+    const randomNumber =  Math.floor(Math.random() * (MAX - MIN + 1)) + MIN; 
+    const shapeClass = ".shape"+randomNumber;
+    const iluminated = "lit-up"+randomNumber;
     compSequence.push(randomNumber);
     computerLightUp(shapeClass, iluminated);
-    /*setTimeout(function(){
-         computerLightUp(shapeClass, iluminated);
-    }, 1000);*/
     console.log("compSeq: ",compSequence);
-   
 }
 function computerLightUp(shapeClass, iluminated){
         document.querySelector(shapeClass).classList.add(iluminated);
@@ -75,22 +94,24 @@ function computerLightUp(shapeClass, iluminated){
 }
 // ----- Play Sequence ------
 function playSequence() {
-    var shapeClass;
-    var iluminated;
+   let shapeClass = "";
+   let iluminated = "";
     let timeOut = 0;
-    let elementCounter = 0;
+    elementCounter.reset();
+    //let elementCounter = 0;
     compSequence.forEach((seq, index) => { 
-        shapeClass = ".shape" + seq;
-        iluminated = "lit-up" + seq;
+       shapeClass = ".shape" + seq;
+       iluminated = "lit-up" + seq;
          timeOut += 1500;
-         elementCounter++;
+         //elementCounter++;
+         elementCounter.increment();
         setTimeout(function(){
             shapeClass = ".shape" + seq;
             iluminated = "lit-up" + seq;
             computerLightUp(shapeClass, iluminated);
         }, timeOut); 
     })
-    if (elementCounter === compSequence.length) {
+    if (elementCounter.value() === compSequence.length) {
             timeOut += 1500
             setTimeout(function() {
                 console.log("fired")
@@ -105,9 +126,10 @@ function playSequence() {
 function checkSequence() {
      if(JSON.stringify(compSequence) == JSON.stringify(playerSequence) ) {
             console.log("true")
-            counter++;
+           // counter++;
+           counter.increment();
             playSequence();
-            document.getElementById("count").innerHTML = counter;
+            document.getElementById("count").innerHTML = counter.value();
             playerSequence = [];
     }
 }
