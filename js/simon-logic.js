@@ -94,17 +94,17 @@ function computerLightUp(shapeClass, iluminated){
 }
 // ----- Play Sequence ------
 function playSequence() {
-   let shapeClass = "";
-   let iluminated = "";
+    let shapeClass = "";
+    let iluminated = "";
     let timeOut = 0;
     elementCounter.reset();
     //let elementCounter = 0;
     compSequence.forEach((seq, index) => { 
-       shapeClass = ".shape" + seq;
-       iluminated = "lit-up" + seq;
-         timeOut += 1500;
+        shapeClass = ".shape" + seq;
+        iluminated = "lit-up" + seq;
+        timeOut += 1500;
          //elementCounter++;
-         elementCounter.increment();
+        elementCounter.increment();
         setTimeout(function(){
             shapeClass = ".shape" + seq;
             iluminated = "lit-up" + seq;
@@ -125,28 +125,21 @@ function playSequence() {
 // ------ match sequence --------
 function checkSequence() {
      if(JSON.stringify(compSequence) == JSON.stringify(playerSequence) ) {
-            console.log("true")
-           // counter++;
-           counter.increment();
-            playSequence();
-            document.getElementById("count").innerHTML = counter.value();
-            playerSequence = [];
+        console.log("true")
+        counter.increment();
+        playSequence();
+        document.getElementById("count").innerHTML = counter.value();
+        playerSequence = [];
     }
 }
 // ------- logic for clicked pads ------
 function padClicked(e) {
     if(onOff.checked) {
-        let classes = e.target.className
-        console.log(classes)
+        let classes = e.target.className;
         classes = classes.split(" ");
-        console.log(classes)
-        let classShape = "."+classes[1];
-        console.log(classShape)
-        classNr = classShape.substring(6, 7);
-        console.log("classNr", classNr)
-        
+        let classShape = "." + classes[1];
+        classNr = classShape.substring(6,7);
         let ilum = "lit-up" + classNr;
-        console.log(ilum)
         playerLightUp(classShape, ilum);
         playerSequence.push(Number(classNr));
         document.querySelector(classShape).addEventListener('mouseup', lightsOut);
@@ -156,13 +149,13 @@ function padClicked(e) {
 }
 
 function playerLightUp(shapeClass, iluminated){
-        document.querySelector(shapeClass).classList.add(iluminated);
+    document.querySelector(shapeClass).classList.add(iluminated);
 }
 // ------- shared logic - computer / player -------
 function lightsOut(e) {
-  let classes = e.target.classList.value.split(" ");
-  e.target.classList.remove(classes[classes.length-1]);
-  checkSequence();
+    let classes = e.target.classList.value.split(" ");
+    e.target.classList.remove(classes[classes.length-1]);
+    checkSequence();
 }
 
 
