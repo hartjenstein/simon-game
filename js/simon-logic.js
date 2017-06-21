@@ -25,7 +25,7 @@ if(onOff.checked) {
 
 // --------- Counter logic -------
 // using closure pattern to avoid poluting global namespace
-let makeCounter =   function() {
+const makeCounter = function() {
   let privateCounter = 0;
   function changeBy(val) {
     privateCounter += val;
@@ -47,8 +47,8 @@ let makeCounter =   function() {
   }   
 };
 // creating two instances of makeCounter
-let counter = makeCounter();
-let elementCounter = makeCounter();
+const counter = makeCounter();
+const elementCounter = makeCounter();
 
 // ----- On - Off Button logic -----
 function turnOnOff(){
@@ -75,6 +75,7 @@ function startGame() {
 let compSequence = [];
 let playerSequence = [];
 let classNr = 0;
+let sequenceInProgress = true;
 function chooseColor(){
     const randomNumber =  Math.floor(Math.random() * (MAX - MIN + 1)) + MIN; 
     const shapeClass = ".shape"+randomNumber;
@@ -82,6 +83,10 @@ function chooseColor(){
     compSequence.push(randomNumber);
     computerLightUp(shapeClass, iluminated);
     console.log("compSeq: ",compSequence);
+    setTimeout(function(){
+        sequenceInProgress = false;
+          console.log("SEQUENCESTATUS :", sequenceInProgress)
+    }, 1000);     
 }
 function computerLightUp(shapeClass, iluminated){
         document.querySelector(shapeClass).classList.add(iluminated);
@@ -94,6 +99,8 @@ function computerLightUp(shapeClass, iluminated){
 }
 // ----- Play Sequence ------
 function playSequence() {
+    sequenceInProgress = true;
+    console.log("SEQUENCESTATUS :", sequenceInProgress)
     let shapeClass = "";
     let iluminated = "";
     let timeOut = 0;
@@ -134,7 +141,9 @@ function checkSequence() {
 }
 // ------- logic for clicked pads ------
 function padClicked(e) {
+    console.log("SEQUENCESTATUS :", sequenceInProgress)
     if(onOff.checked) {
+       if(sequenceInProgress === false) { 
         let classes = e.target.className;
         classes = classes.split(" ");
         let classShape = "." + classes[1];
@@ -144,7 +153,7 @@ function padClicked(e) {
         playerSequence.push(Number(classNr));
         document.querySelector(classShape).addEventListener('mouseup', lightsOut);
         console.log("playerSeq: ", playerSequence)
-        
+      } 
     }
 }
 
