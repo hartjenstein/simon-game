@@ -46,7 +46,7 @@ let makeCounter =   function() {
     }
   }   
 };
-// creating to instances of makeCounter
+// creating two instances of makeCounter
 let counter = makeCounter();
 let elementCounter = makeCounter();
 
