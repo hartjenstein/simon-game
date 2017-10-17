@@ -13,6 +13,10 @@ onOff.addEventListener('click', turnOnOff);
 const startBtn = document.querySelector(".start");
 startBtn.addEventListener('click', startGame);
 
+// --- strict Button 
+const strictBtn = document.querySelector(".btn-round.strict");
+strictBtn.addEventListener("click", strictMode);
+
 // ----- Pad Press --------
 const pads = document.querySelectorAll(".pad");
 
@@ -70,7 +74,19 @@ function startGame() {
         chooseColor();    
     }
 }
+// strict button
 
+function strictMode(e) {
+    if(onOff.checked) {
+           
+
+    console.log("fired")
+    let strictLight = document.querySelector(".strict-light");
+    console.log(strictLight);
+    strictLight.classList.toggle("on");
+    console.log(strictLight.classList)
+    }
+}
 // ----- Computer sequence logic -------
 let compSequence = [];
 let playerSequence = [];
@@ -178,3 +194,4 @@ function getAudio(shapeClass) {
     console.log(audioFile)
     audioFile.play();
 }
+
