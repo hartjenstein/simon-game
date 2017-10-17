@@ -90,6 +90,7 @@ function chooseColor(){
 }
 function computerLightUp(shapeClass, iluminated){
         document.querySelector(shapeClass).classList.add(iluminated);
+        getAudio(shapeClass);
         setTimeout(function(){
             if(document.querySelector(shapeClass).classList.contains(iluminated)) {
                 document.querySelector(shapeClass).classList.remove(iluminated);
@@ -104,6 +105,7 @@ function playSequence() {
     let shapeClass = "";
     let iluminated = "";
     let timeOut = 0;
+    
     elementCounter.reset();
     //let elementCounter = 0;
     compSequence.forEach((seq, index) => { 
@@ -116,6 +118,7 @@ function playSequence() {
             shapeClass = ".shape" + seq;
             iluminated = "lit-up" + seq;
             computerLightUp(shapeClass, iluminated);
+            getAudio(shapeClass);
         }, timeOut); 
     })
     if (elementCounter.value() === compSequence.length) {
@@ -159,6 +162,8 @@ function padClicked(e) {
 
 function playerLightUp(shapeClass, iluminated){
     document.querySelector(shapeClass).classList.add(iluminated);
+    console.log("shapeClass:", shapeClass)
+    getAudio(shapeClass);
 }
 // ------- shared logic - computer / player -------
 function lightsOut(e) {
@@ -167,5 +172,9 @@ function lightsOut(e) {
     checkSequence();
 }
 
-
-
+// ------- Sound logic --------
+function getAudio(shapeClass) {
+    let audioFile = document.querySelector(shapeClass).querySelector("audio");
+    console.log(audioFile)
+    audioFile.play();
+}
