@@ -156,6 +156,22 @@ function checkSequence() {
         playSequence();
         document.getElementById("count").innerHTML = counter.value();
         playerSequence = [];
+    } else {
+        let failAudio = new Audio('./audio/fail-buzzer-03.mp3');
+        failAudio.play();
+        for (var i = 0; i < 3; i++) {
+            setTimeout(function() {
+                document.getElementById("counter").innerHTML="! !";
+                console.log("Test");
+            }, 500 * i);
+        };
+        for (var i = 0; i < 3; i++) {
+            setTimeout(function() {
+                document.getElementById("counter").innerHTML="--";
+                console.log("Test2");
+            }, 500 * i);
+        };
+        document.getElementById("counter").innerHTML="! !";
     }
 }
 // ------- logic for clicked pads ------
