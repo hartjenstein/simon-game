@@ -75,16 +75,24 @@ function startGame() {
     }
 }
 // strict button
-
+var strict = false;
 function strictMode(e) {
     if(onOff.checked) {
            
 
     console.log("fired")
+    
     let strictLight = document.querySelector(".strict-light");
     console.log(strictLight);
     strictLight.classList.toggle("on");
     console.log(strictLight.classList)
+        if(strictLight.classList.contains("on")) {
+            strict = true;
+            console.log(strict);
+        } else {
+            strict = false;
+            console.log(strict);
+        }
     }
 }
 // ----- Computer sequence logic -------
@@ -92,6 +100,7 @@ let compSequence = [];
 let playerSequence = [];
 let classNr = 0;
 let sequenceInProgress = true;
+
 function chooseColor(){
     const randomNumber =  Math.floor(Math.random() * (MAX - MIN + 1)) + MIN; 
     const shapeClass = ".shape"+randomNumber;
@@ -157,21 +166,25 @@ function checkSequence() {
         document.getElementById("count").innerHTML = counter.value();
         playerSequence = [];
     } else {
-        let failAudio = new Audio('./audio/fail-buzzer-03.mp3');
-        failAudio.play();
-        for (var i = 0; i < 3; i++) {
-            setTimeout(function() {
-                document.getElementById("counter").innerHTML="! !";
-                console.log("Test");
-            }, 500 * i);
-        };
-        for (var i = 0; i < 3; i++) {
-            setTimeout(function() {
-                document.getElementById("counter").innerHTML="--";
-                console.log("Test2");
-            }, 500 * i);
-        };
-        document.getElementById("counter").innerHTML="! !";
+            if (strict === true) {
+            let failAudio = new Audio('./audio/fail-buzzer-03.mp3');
+            failAudio.play();
+           /*  for (var i = 0; i < 3; i++) {
+                setTimeout(function() {
+                    document.getElementById("counter").innerHTML="! !";
+                    console.log("Test");
+                }, 500 * i);
+            };
+            for (var i = 0; i < 3; i++) {
+                setTimeout(function() {
+                    document.getElementById("counter").innerHTML="--";
+                    console.log("Test2");
+                }, 500 * i);
+            }; */
+            document.getElementById("counter").innerHTML="! !";
+        } else {
+            playSequence();
+        }
     }
 }
 // ------- logic for clicked pads ------
