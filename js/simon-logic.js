@@ -85,13 +85,11 @@ function strictMode(e) {
     let strictLight = document.querySelector(".strict-light");
     console.log(strictLight);
     strictLight.classList.toggle("on");
-    console.log(strictLight.classList)
         if(strictLight.classList.contains("on")) {
             strict = true;
             console.log(strict);
         } else {
             strict = false;
-            console.log(strict);
         }
     }
 }
@@ -165,23 +163,21 @@ function checkSequence() {
         playSequence();
         document.getElementById("count").innerHTML = counter.value();
         playerSequence = [];
-    } else {
-            if (strict === true) {
+    }  else {
+        if(JSON.stringify(compSequence) !== JSON.stringify(playerSequence) && strict === true) {
+           
             let failAudio = new Audio('./audio/fail-buzzer-03.mp3');
             failAudio.play();
-           /*  for (var i = 0; i < 3; i++) {
-                setTimeout(function() {
-                    document.getElementById("counter").innerHTML="! !";
-                    console.log("Test");
-                }, 500 * i);
-            };
-            for (var i = 0; i < 3; i++) {
-                setTimeout(function() {
-                    document.getElementById("counter").innerHTML="--";
-                    console.log("Test2");
-                }, 500 * i);
-            }; */
+    
+            setTimeout(function() {
+                document.getElementById("counter").innerHTML="--";
+                let strictLight = document.querySelector(".strict-light");
+                console.log(strictLight);
+                strictLight.classList.toggle("on");
+              },3000)
             document.getElementById("counter").innerHTML="! !";
+            
+            
         } else {
             playSequence();
         }
@@ -220,7 +216,6 @@ function lightsOut(e) {
 // ------- Sound logic --------
 function getAudio(shapeClass) {
     let audioFile = document.querySelector(shapeClass).querySelector("audio");
-    console.log(audioFile)
     audioFile.play();
 }
 

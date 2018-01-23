@@ -4,6 +4,10 @@
              src: url('../fonts/ds_digital/DS-DIGII.TTF') format('truetype'); }
             
 /* ----------------- Corpus -------------------------*/
+html {
+                background-image: url("../img/wood-desk.png");
+
+}
 .wrapper{
   position: relative;
   width:660px;
@@ -11,7 +15,7 @@
 }
 .back{
   position: absolute;
-  top:170px;
+  top:70px;
   width:640px;
   height: 640px;
   z-index:0;
@@ -303,3 +307,49 @@ width:22px;
     padding: 5px 10px 0px 5px ;
     margin-bottom: 10px;
 }
+
+
+  /* Scaling for pad */
+@media screen and (max-width: 800px){
+
+    .wrapper {
+      top:10%;
+      
+      -moz-transform: scale(0.8);
+      -ms-transform: scale(0.8);
+      -o-transform: scale(0.8);
+      -webkit-transform: scale(0.8);
+      transform: scale(0.8);
+      
+      -o-transform-origin: 0 0;
+      -ms-transform-origin: 0 0;
+      -webkit-transform-origin: 0 0;
+      -moz-transform-origin: 0 0;
+      transform-origin: 0 0;
+      
+      left: 30%;
+      margin-left: -142px;
+    }
+  }
+  /* Scaling for Mobile */
+@media screen and (max-width: 520px){
+
+    .wrapper {
+      top: 40px;
+      
+      -moz-transform: scale(0.6);
+      -ms-transform: scale(0.6);
+      -o-transform: scale(0.6);
+      -webkit-transform: scale(0.6);
+      transform: scale(0.6);
+      
+      -o-transform-origin: 0 0;
+      -ms-transform-origin: 0 0;
+      -webkit-transform-origin: 0 0;
+      -moz-transform-origin: 0 0;
+      transform-origin: 0 0;
+      
+      left: 37%;
+      margin-left: -142px;
+    }
+  }
