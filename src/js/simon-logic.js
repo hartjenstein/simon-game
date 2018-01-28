@@ -1,13 +1,16 @@
 "use strict";
+
+function playGame() {
 // --------- Constants --------
     const MAX = 4;
     const MIN = 1;
 
 // ---------Event Listeners ---------
-
+ 
 // --- On-Off Switch 
-const onOff = document.querySelector(".onoffswitch-checkbox");
-onOff.addEventListener('click', turnOnOff);
+const onOffSwitch = document.querySelector(".onoffswitch-checkbox");
+
+onOffSwitch.addEventListener('click', turnOnOff);
 
 // --- start Button 
 const startBtn = document.querySelector(".start");
@@ -15,16 +18,12 @@ startBtn.addEventListener('click', startGame);
 
 // --- strict Button 
 const strictBtn = document.querySelector(".btn-round.strict");
-strictBtn.addEventListener("click", strictMode);
+strictBtn.addEventListener("click", activateStrictMode);
 
 // ----- Pad Press --------
 const pads = document.querySelectorAll(".pad");
-
 for (let pad of pads) {
     pad.addEventListener("mousedown", padClicked );
-}
-if(onOff.checked) {
-    turnOn();
 }
 
 // --------- Counter logic -------
@@ -51,24 +50,27 @@ const makeCounter = function() {
   }   
 };
 // creating two instances of makeCounter
-const counter = makeCounter();
-const elementCounter = makeCounter();
+const Counter = makeCounter();
+const ElementCounter = makeCounter();
 
 // ----- On - Off Button logic -----
 function turnOnOff(){
-    counter.reset();
-    //let counter = 0;
-    document.getElementById("count").innerHTML = counter.value();
-    if(!onOff.checked) {
-        onOff.checked = false; 
+    Counter.reset();
+    //let Counter = 0;
+    document.getElementById("count").innerHTML = Counter.value();
+    if(!onOffSwitch.checked) {
+        onOffSwitch.checked = false; 
+        document.querySelector(".strict-light").innerHTML = "";
+        console.log("OFF", onOffSwitch.checked )
     } else {
-        onOff.checked = true; 
+        onOffSwitch.checked = true; 
+        console.log("ON")
     }
 }
 
 function startGame() {
     
-    if(onOff.checked) {
+    if(onOffSwitch.checked) {
         compSequence = [];
         playerSequence = [];
         chooseColor();    
@@ -76,18 +78,12 @@ function startGame() {
 }
 // strict button
 var strict = false;
-function strictMode(e) {
-    if(onOff.checked) {
-           
-
-    console.log("fired")
-    
-    let strictLight = document.querySelector(".strict-light");
-    console.log(strictLight);
-    strictLight.classList.toggle("on");
+function activateStrictMode() {
+    if(onOffSwitch.checked) {
+        let strictLight = document.querySelector(".strict-light");
+        strictLight.classList.toggle("on");
         if(strictLight.classList.contains("on")) {
             strict = true;
-            console.log(strict);
         } else {
             strict = false;
         }
@@ -98,6 +94,9 @@ let compSequence = [];
 let playerSequence = [];
 let classNr = 0;
 let sequenceInProgress = true;
+let timeOut = 0;
+let speedCount = 1;
+let currentSpeed = 0;
 
 function chooseColor(){
     const randomNumber =  Math.floor(Math.random() * (MAX - MIN + 1)) + MIN; 
@@ -105,88 +104,133 @@ function chooseColor(){
     const iluminated = "lit-up"+randomNumber;
     compSequence.push(randomNumber);
     computerLightUp(shapeClass, iluminated);
-    console.log("compSeq: ",compSequence);
     setTimeout(function(){
         sequenceInProgress = false;
-          console.log("SEQUENCESTATUS :", sequenceInProgress)
     }, 1000);     
 }
 function computerLightUp(shapeClass, iluminated){
-        document.querySelector(shapeClass).classList.add(iluminated);
-        getAudio(shapeClass);
-        setTimeout(function(){
-            if(document.querySelector(shapeClass).classList.contains(iluminated)) {
+    document.querySelector(shapeClass).classList.add(iluminated);
+    getAudio(shapeClass);
+    setTimeout(function(){
+        if(document.querySelector(shapeClass).classList.contains(iluminated)) {
                 document.querySelector(shapeClass).classList.remove(iluminated);
-            }
-        }, 1000); 
+        }
+    }, 1000); 
 
 }
+
 // ----- Play Sequence ------
+
 function playSequence() {
     sequenceInProgress = true;
-    console.log("SEQUENCESTATUS :", sequenceInProgress)
     let shapeClass = "";
     let iluminated = "";
-    let timeOut = 0;
-    
-    elementCounter.reset();
-    //let elementCounter = 0;
+    timeOut = 0;
+    currentSpeed = gameSpeed(speedCount);
+    ElementCounter.reset();
     compSequence.forEach((seq, index) => { 
         shapeClass = ".shape" + seq;
         iluminated = "lit-up" + seq;
-        timeOut += 1500;
-         //elementCounter++;
-        elementCounter.increment();
+        /* console.log("compSeq:", compSequence[i]) */
+
+            timeOut += currentSpeed;
+  
+        console.log("TIMEOUT1",timeOut)
+        ElementCounter.increment();
         setTimeout(function(){
             shapeClass = ".shape" + seq;
             iluminated = "lit-up" + seq;
             computerLightUp(shapeClass, iluminated);
             getAudio(shapeClass);
+            sequenceInProgress = false;
         }, timeOut); 
-    })
-    if (elementCounter.value() === compSequence.length) {
-            timeOut += 1500
-            setTimeout(function() {
-                console.log("fired")
-                chooseColor();
-            }, timeOut);
-        }     
         
-   
+    })
 }
+function gameSpeed(count) {
+    let timings = [1500,1000,500,250];
+    if (count % 5 == 0 && count > 0) {
+        speedCount++; 
+        console.log("SPEEDINCREASE")
+    }
+    return timings[count];
+}
+function addNewColor() {
+    if (ElementCounter.value() === compSequence.length) {
+        /* timeOut = gameSpeed(speedCount); */
+        console.log("TIMEOUT2",timeOut)
+        timeOut += currentSpeed;
+     /*    timeOut += 1500*/
+       
 
+        setTimeout(function() {
+            chooseColor();
+        }, timeOut);
+    }  
+}
 // ------ match sequence --------
 function checkSequence() {
-     if(JSON.stringify(compSequence) == JSON.stringify(playerSequence) ) {
-        console.log("true")
-        counter.increment();
-        playSequence();
-        document.getElementById("count").innerHTML = counter.value();
-        playerSequence = [];
-    }  else {
-        if(JSON.stringify(compSequence) !== JSON.stringify(playerSequence) && strict === true) {
-           
-            let failAudio = new Audio('./audio/fail-buzzer-03.mp3');
-            failAudio.play();
     
-            setTimeout(function() {
-                document.getElementById("counter").innerHTML="--";
-                let strictLight = document.querySelector(".strict-light");
-                console.log(strictLight);
-                strictLight.classList.toggle("on");
-              },3000)
-            document.getElementById("counter").innerHTML="! !";
-            
-            
-        } else {
-            playSequence();
-        }
+    let count = document.querySelector("#count");
+    // ---- Check if Player pressed wrong button -----
+    playerSequence.forEach((el, i) => {
+        if (el !== compSequence[i]){
+            if (strict !== true) {
+                playerFail();
+                setTimeout(function(){
+                    count.innerHTML=Counter.value(); 
+                    playSequence();
+                    playerSequence = [];
+                    /* sequenceInProgress = false; */
+                }, 2000); 
+            return    
+            } else if (strict == true) {
+                playerFail();
+                activateStrictMode();
+                gameOver(Counter)
+            return;
+            }     
+        } 
+    });  
+    
+    // ------- Check if whole sequence was correct
+    if(compSequence.length == playerSequence.length && JSON.stringify(compSequence) == JSON.stringify(playerSequence) ) {
+        Counter.increment();
+        playSequence();
+        addNewColor(); 
+        count.innerHTML = Counter.value();
+        playerSequence = [];
+    } 
+}
+
+function playerFail() {
+    let failAudio = new Audio('./audio/fail-buzzer-03.mp3');
+    failAudio.play();
+}
+
+function gameOver(counter) {
+    turnOnOff();
+    flashScreen(counter,"",250,5);
+    flashScreen(counter,"!!",500,5);
+};
+
+function flashScreen(counter, msg, milliSeconds, repeatXtimes) {
+    console.log(repeatXtimes)
+    let count = document.getElementById("count");
+    if(repeatXtimes == 0) {
+        setTimeout(function() {
+            count.innerHTML = counter.reset();
+        },milliSeconds);
+        return turnOnOff();
     }
+    setTimeout(function() {
+        count.innerHTML = msg; 
+    },milliSeconds);
+    return flashScreen(counter, msg,milliSeconds+500,repeatXtimes-1);
 }
 // ------- logic for clicked pads ------
 function padClicked(e) {
-    console.log("SEQUENCESTATUS :", sequenceInProgress)
-    if(onOff.checked) {
+    if(onOffSwitch.checked) {
        if(sequenceInProgress === false) { 
         let classes = e.target.className;
         classes = classes.split(" ");
@@ -196,26 +240,25 @@ function padClicked(e) {
         playerLightUp(classShape, ilum);
         playerSequence.push(Number(classNr));
         document.querySelector(classShape).addEventListener('mouseup', lightsOut);
-        console.log("playerSeq: ", playerSequence)
       } 
     }
 }
 
 function playerLightUp(shapeClass, iluminated){
     document.querySelector(shapeClass).classList.add(iluminated);
-    console.log("shapeClass:", shapeClass)
     getAudio(shapeClass);
 }
 // ------- shared logic - computer / player -------
 function lightsOut(e) {
     let classes = e.target.classList.value.split(" ");
     e.target.classList.remove(classes[classes.length-1]);
-    checkSequence();
+    checkSequence()
 }
-
 // ------- Sound logic --------
 function getAudio(shapeClass) {
     let audioFile = document.querySelector(shapeClass).querySelector("audio");
     audioFile.play();
 }
 
+};
+playGame();
