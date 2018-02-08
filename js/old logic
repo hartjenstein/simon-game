@@ -95,10 +95,6 @@ let playerSequence = [];
 let classNr = 0;
 let sequenceInProgress = true;
 let timeOut = 0;
-let speedCount = 0;
-let currentSpeed = 0;
-let audioFiles =  preloadAudio();
-console.log("AFILES: ", audioFiles);
 
 function chooseColor(){
     const randomNumber =  Math.floor(Math.random() * (MAX - MIN + 1)) + MIN; 
@@ -111,9 +107,8 @@ function chooseColor(){
     }, 1000);     
 }
 function computerLightUp(shapeClass, iluminated){
-    getAudio(shapeClass);
     document.querySelector(shapeClass).classList.add(iluminated);
-   
+    getAudio(shapeClass);
     setTimeout(function(){
         if(document.querySelector(shapeClass).classList.contains(iluminated)) {
                 document.querySelector(shapeClass).classList.remove(iluminated);
@@ -121,48 +116,42 @@ function computerLightUp(shapeClass, iluminated){
     }, 1000); 
 
 }
-
+let multiplier = 1;
 // ----- Play Sequence ------
-
 function playSequence() {
     sequenceInProgress = true;
     let shapeClass = "";
     let iluminated = "";
     timeOut = 0;
-    currentSpeed = gameSpeed(speedCount);
     ElementCounter.reset();
     compSequence.forEach((seq, index) => { 
         shapeClass = ".shape" + seq;
         iluminated = "lit-up" + seq;
-        timeOut += currentSpeed;
-        console.log("TIMEOUT1",timeOut)
+        
+            timeOut += 1500;
+            if (count % 5 == 0   ) {
+                multiplier++;
+                timeOut = timeOut * multiplier;
+            }
         ElementCounter.increment();
         setTimeout(function(){
             shapeClass = ".shape" + seq;
-            getAudio(shapeClass);
             iluminated = "lit-up" + seq;
             computerLightUp(shapeClass, iluminated);
+            getAudio(shapeClass);
             sequenceInProgress = false;
         }, timeOut); 
-        
     })
 }
-function gameSpeed(count) {
-    let timings = [1500,1000,500,250];
-    if (count % 5 == 0 && count > 0) {
-        speedCount++; 
-        console.log("SPEEDINCREASE")
-    }
-    return timings[count];
-}
+functin
 function addNewColor() {
     if (ElementCounter.value() === compSequence.length) {
-        /* timeOut = gameSpeed(speedCount); */
-        console.log("TIMEOUT2",timeOut)
-        timeOut += currentSpeed;
-     /*    timeOut += 1500*/
+        timeOut += 1500
        
-
+        if (count % 5 == 0   ) {
+            multiplier++;
+            timeOut = timeout * multiplier;
+        }
         setTimeout(function() {
             chooseColor();
         }, timeOut);
@@ -245,9 +234,8 @@ function padClicked(e) {
 }
 
 function playerLightUp(shapeClass, iluminated){
-    getAudio(shapeClass);
     document.querySelector(shapeClass).classList.add(iluminated);
-   
+    getAudio(shapeClass);
 }
 // ------- shared logic - computer / player -------
 function lightsOut(e) {
@@ -256,26 +244,10 @@ function lightsOut(e) {
     checkSequence()
 }
 // ------- Sound logic --------
-/* const audioFile1 = document.querySelector(".shape1").querySelector("audio");
-const audioFile2 = document.querySelector(".shape2").querySelector("audio");
-const audioFile3 = document.querySelector(".shape3").querySelector("audio");
-const audioFile4 = document.querySelector(".shape4").querySelector("audio"); */
-function preloadAudio() {
-    let audio = document.getElementsByClassName("sound");
-    let audioFiles = [];
-    Array.from(audio).forEach(file => {
-        audioFiles.push(file);
-    })
-    return audioFiles;
-}
 function getAudio(shapeClass) {
-    let audioFile = audioFiles[shapeClass.substr(shapeClass.length-1)-1];
-    audioFile.play();
-}
-/* function getAudio(shapeClass) {
     let audioFile = document.querySelector(shapeClass).querySelector("audio");
     audioFile.play();
-} */
+}
 
 };
 playGame();
